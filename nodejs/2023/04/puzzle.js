@@ -20,9 +20,9 @@ let cards = rows.map(row => {
 });
 
 recursiveWin = ({id, matches}) => {
-    cards.filter(x => x.id > id && x.id <= id + matches).map(card => {
-        cards.find(x => x.id == card.id).copies += recursiveWin(card);
-    });
+    for(let x = id; x <= Math.min(id + matches - 1, cards.length); x++){
+        cards[x].copies += recursiveWin(cards[x]);
+    }
     return 1;
 };
 
