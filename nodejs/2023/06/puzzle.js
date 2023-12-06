@@ -17,8 +17,7 @@ calculate = (times, distances) => {
 
 console.log(`Part 1: ${calculate(times, distances)}`);
 
-kerning = arr => [parseInt(arr.join(""))];
-times = kerning(times);
-distances = kerning(distances);
+times = [parseInt(times.join(""))];
+distances = [parseInt(distances.join(""))];
 
 console.log(`Part 2: ${calculate(times, distances)}`);
