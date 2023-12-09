@@ -20,6 +20,16 @@
             ],
             "program": "${fileDirname}\\puzzle.js",
             "args": ["${fileDirname}\\input_example.txt"]
+        },
+        {
+            "type": "node",
+            "request": "launch",
+            "name": "Launch Puzzle Example 2 Input",
+            "skipFiles": [
+                "<node_internals>/**"
+            ],
+            "program": "${fileDirname}\\puzzle.js",
+            "args": ["${fileDirname}\\input_example2.txt"]
         }
 
     ]
