@@ -14,6 +14,9 @@ let rows = fs.readFileSync(filename, "utf-8").split("\r\n");
 
 let SPACE_CHAR = ".";
 let GALAXY_CHAR = "#";
+let EXPANSION_SIZE = 2;
+let col_expansions = [];
+let row_expansions = [];
 
 const display = () =>{
     rows.forEach((row, i) => console.log(i + "\t" + row));
@@ -34,13 +37,7 @@ const expandCols = data => {
         }
     }
 
-    cols.reverse().forEach(y => {
-        for(let x = 0; x < data.length; x++){
-            data[x] = data[x].slice(0, y) + SPACE_CHAR + data[x].slice(y);
-        }
-    });
-
-    return data;
+    return cols;
 }
 
 const expandRows = data => {
@@ -58,11 +55,7 @@ const expandRows = data => {
         }
     }
 
-    rows.reverse().forEach(row => {
-        data.splice(row, 0, SPACE_CHAR.repeat(data[0].length));
-    });
-
-    return data;
+    return rows;
 }
 
 const findGalaxies = data => {
@@ -94,7 +87,10 @@ const shortestPath = (coord1, coord2) => {
     let {x:x1, y:y1} = coord1;
     let {x:x2, y:y2} = coord2;
 
-    let distance = Math.abs(x1 - x2) + Math.abs(y1 - y2);
+    let x_expand = row_expansions.filter(x => x > Math.min(x1, x2) && x < Math.max(x1, x2)).length;
+    let y_expand = col_expansions.filter(y => y > Math.min(y1, y2) && y < Math.max(y1, y2)).length;
+
+    let distance = Math.abs(x1 - x2) + Math.abs(y1 - y2) + (x_expand + y_expand) * (EXPANSION_SIZE - 1);
     return distance;
 }
 
@@ -108,18 +104,19 @@ const generatePaths = pairs => {
 }
 
 
-expandCols(rows);
-expandRows(rows);
+col_expansions = expandCols(rows);
+row_expansions = expandRows(rows);
 let galaxies = findGalaxies(rows);
 let pairs = generatePairs(galaxies);
 let paths = generatePaths(pairs);
-display();
 
-//console.log(util.inspect(galaxies, inspect_options));
-//console.log(util.inspect(pairs, inspect_options));
-//console.log(pairs.length);
 //console.log(util.inspect(paths, inspect_options));
 
 let p1 = paths.map(({path}) => path).reduce((a,b) => a+b, 0);
 
+EXPANSION_SIZE = 1000000;
+paths = generatePaths(pairs);
+let p2 = paths.map(({path}) => path).reduce((a,b) => a+b, 0);
+
 console.log(`Part 1: ${p1}`);
+console.log(`Part 2: ${p2}`);
